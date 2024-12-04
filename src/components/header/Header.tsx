@@ -1,8 +1,22 @@
+import FunctionalButtons from "./FunctionalButtons";
+import Settings from "./Settings";
+
 const Header = () => {
   return (
-    <div className="text-4xl ">
-      <h1 className="text-4xl text-blue-600 text-center">Hello from HuiLab</h1>
-    </div>
+    <header className="w-screen py-2 px-4 border-b border-whiteBorder">
+      <div className="flex justify-between">
+        <div className="flex items-center justify-center">
+          <h1
+            className="hover:text-orangeLight text-base cursor-pointer"
+            onClick={() => alert("you are gay")}
+          >
+            HuiLab
+          </h1>
+        </div>
+        <Settings />
+        <FunctionalButtons />
+      </div>
+    </header>
   );
 };
 

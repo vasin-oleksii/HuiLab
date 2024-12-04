@@ -36,7 +36,7 @@ function Home() {
     };
 
     socket.onmessage = async (e) => {
-      // console.log("Received:", e.data);
+      console.log("Received:", e.data);
       setMessages(e.data);
 
       try {
@@ -44,7 +44,7 @@ function Home() {
 
         parsed.map((item) => {
           const { action } = item;
-
+          console.log(item);
           switch (action) {
             case "connected":
               setNameUser(action.u_id);
@@ -122,7 +122,7 @@ function Home() {
   }, [ws]);
 
   return (
-    <div className="bg-black h-screen text-white">
+    <div className="bg-blackBg  h-screen text-white">
       <Header />
       <div className="text-center">{nameUser}</div>
 
@@ -133,12 +133,12 @@ function Home() {
         </p>
       </main>
 
-      {totalUsers.map((cursor: any, i) => {
+      {totalUsers.map((cursor: any) => {
         let { cords, u_id, color } = cursor;
 
         return (
           <div
-            key={i}
+            key={u_id}
             style={{
               top: cords.y,
               left: cords.x,
