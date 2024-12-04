@@ -22,14 +22,13 @@ function Home() {
   const [ws, setWs] = useState(null);
 
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-  const [remoteCoordinates, setRemoteCoordinates] = useState<any>([]);
 
   const [nameUser, setNameUser] = useState("");
 
   const [totalUsers, setTotalUsers] = useState<any>([]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://shoesndropshipping.pp.ua/wst/");
+    const socket = new WebSocket(import.meta.env.VITE_WS_LINK);
 
     socket.onopen = () => {
       console.log("WebSocket connection established");
@@ -71,10 +70,6 @@ function Home() {
               break;
           }
         });
-
-        // const fin = parsed[0].cords;
-
-        // handleRemoteCoordinates(parsed[1]);
       } catch (error) {
         console.error("Failed to parse message:", error);
       }
