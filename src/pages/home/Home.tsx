@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "../../components/header/Header";
+
 import Footer from "../../components/footer/Footer";
 
 import "../../index.css";
@@ -107,7 +107,6 @@ function Home() {
 
   return (
     <div className="bg-blackBg  h-screen text-white">
-      <Header />
       <div className="text-center">{nameUser}</div>
 
       <main className="h-5/6">

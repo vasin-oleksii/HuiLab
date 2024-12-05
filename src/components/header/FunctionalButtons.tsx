@@ -11,7 +11,7 @@ const FunctionalButtons = () => {
     { label: "Share App", icon: <FaShareAltSquare /> },
   ];
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3 text-white">
       {icons.map((iconItem, i) => {
         const { label, icon } = iconItem;
 
