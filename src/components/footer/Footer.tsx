@@ -1,6 +1,10 @@
 import { BsLightningFill } from "react-icons/bs";
 
-const Footer = () => {
+interface FooterProps {
+  allUsersNum: number;
+}
+
+const Footer = ({ allUsersNum }: FooterProps) => {
   return (
     <footer className="w-screen py-2 px-4 border-t border-blackBorder  flex items-start flex-row gap-6 align-middle">
       <div className="flex items-center">
@@ -10,7 +14,7 @@ const Footer = () => {
         <h3 className="text-xs">Running</h3>
       </div>
       <div>
-        <h4 className="text-xs">View: ?</h4>
+        <h4 className="text-xs">View: {allUsersNum}</h4>
       </div>
     </footer>
   );

@@ -7,6 +7,7 @@ import { GiArrowCursor } from "react-icons/gi";
 
 function Home() {
   const [message, setMessages] = useState("");
+  const [allUsersNum, setAllUsersNum] = useState(0);
   const [ws, setWs] = useState(null);
 
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
@@ -31,7 +32,7 @@ function Home() {
 
         parsed.map((item) => {
           const { action } = item;
-          console.log(item);
+          // console.log(item);
           switch (action) {
             case "connected":
               setNameUser(action.u_id);
@@ -44,6 +45,9 @@ function Home() {
 
                 return [...filteredState, { ...item }];
               });
+              break;
+            case "update_total_users":
+              setAllUsersNum(item.count);
               break;
             case "delete_cursor":
               setTotalUsers((state) => {
@@ -132,7 +136,7 @@ function Home() {
           </div>
         );
       })}
-      <Footer />
+      <Footer allUsersNum={allUsersNum} />
     </div>
   );
 }
