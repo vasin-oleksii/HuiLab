@@ -11,7 +11,7 @@ const Settings = () => {
   ];
 
   return (
-    <div className="flex gap-6 items-center">
+    <div className="flex sm:gap-6 gap-2 items-center">
       {buttons.map((btn, i) => (
         <div
           key={i}

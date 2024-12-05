@@ -4,6 +4,7 @@ import Footer from "../../components/footer/Footer";
 
 import "../../index.css";
 import { GiArrowCursor } from "react-icons/gi";
+import Header from "../../components/header/Header";
 
 function Home() {
   const [message, setMessages] = useState("");
@@ -106,37 +107,41 @@ function Home() {
   }, [ws]);
 
   return (
-    <div className="bg-blackBg  h-screen text-white">
-      <div className="text-center">{nameUser}</div>
+    <>
+      <Header />
 
-      <main className="h-5/6">
-        <h2>Last message: {message}</h2>
-        <p>
-          Your coordinates: x={coordinates.x}, y={coordinates.y}
-        </p>
-      </main>
+      <div className="bg-blackBg  h-screen text-white">
+        <div className="text-center">{nameUser}</div>
 
-      {totalUsers.map((cursor: any) => {
-        let { cords, u_id, color } = cursor;
+        <main className="h-5/6">
+          <h2>Last message: {message}</h2>
+          <p>
+            Your coordinates: x={coordinates.x}, y={coordinates.y}
+          </p>
+        </main>
 
-        return (
-          <div
-            key={u_id}
-            style={{
-              top: cords.y,
-              left: cords.x,
-              color: "" + color,
-              position: "absolute",
-              borderRadius: "100%",
-            }}
-            className="text-2xl drop-shadow-2xl shadow-white"
-          >
-            <GiArrowCursor />
-          </div>
-        );
-      })}
-      <Footer allUsersNum={allUsersNum} />
-    </div>
+        {totalUsers.map((cursor: any) => {
+          let { cords, u_id, color } = cursor;
+
+          return (
+            <div
+              key={u_id}
+              style={{
+                top: cords.y,
+                left: cords.x,
+                color: "" + color,
+                position: "absolute",
+                borderRadius: "100%",
+              }}
+              className="text-2xl drop-shadow-2xl shadow-white"
+            >
+              <GiArrowCursor />
+            </div>
+          );
+        })}
+        <Footer allUsersNum={allUsersNum} />
+      </div>
+    </>
   );
 }
 
