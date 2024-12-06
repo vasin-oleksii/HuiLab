@@ -23,7 +23,7 @@ const Login = () => {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-blackLight border border-blackBorder text-white rounded-lg focus:ring-orange focus:border-orange block w-full p-2.5"
+                  className="bg-blackLight border border-white text-white rounded-lg focus:ring-orange focus:border-orange block w-full p-2.5"
                   placeholder="name@company.com"
                   required
                 />
@@ -40,7 +40,7 @@ const Login = () => {
                   name="password"
                   id="password"
                   placeholder="••••••••"
-                  className="bg-blackLight border border-blackBorder text-white rounded-lg focus:ring-orange focus:border-orange block w-full p-2.5"
+                  className="bg-blackLight border border-white text-white rounded-lg focus:ring-orange focus:border-orange block w-full p-2.5"
                   required
                 />
               </div>
