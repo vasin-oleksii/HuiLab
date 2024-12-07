@@ -1,7 +1,49 @@
 import { Link } from "react-router";
 import Logo from "../../components/logo/Logo";
+import { FieldError, useForm } from "react-hook-form";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setCookie } from "../../features/cookie/cookieSlice";
+import Cookies from "js-cookie";
+
+interface Login {
+  username: string;
+  password: string;
+}
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Login>();
+
+  const dispatch = useDispatch();
+
+  const handleSaveCookies = (sessionid: string) => {
+    dispatch(setCookie(sessionid));
+  };
+
+  const onSubmit = async (data: Login) => {
+    console.log(data);
+    try {
+      const response: { data: { sessionid: string } } = await axios.post(
+        `${import.meta.env.VITE_API_LINK}auth/`,
+        JSON.stringify(data),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      Cookies.set("sessionId", response.data.sessionid);
+
+      handleSaveCookies(response.data.sessionid);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <section className="bg-blackBg h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -11,23 +53,29 @@ const Login = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form
+              className="space-y-4 md:space-y-6"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div>
                 <label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-white"
                 >
-                  Your email
+                  Your username
                 </label>
                 <input
-                  type="email"
-                  name="email"
-                  id="email"
+                  type="text"
+                  {...register("username")}
+                  id="username"
                   className="bg-blackLight border border-white text-white rounded-lg focus:ring-orange focus:border-orange block w-full p-2.5"
-                  placeholder="name@company.com"
+                  placeholder="username"
                   required
                 />
               </div>
+              <p className="text-red-500 text-sm mt-2">
+                {(errors.username as FieldError)?.message}
+              </p>
               <div>
                 <label
                   htmlFor="password"
@@ -36,15 +84,22 @@ const Login = () => {
                   Password
                 </label>
                 <input
+                  {...register("password", {
+                    required: "Is required!",
+                    maxLength: { value: 127, message: "Too Long" },
+                    minLength: { value: 6, message: "Too short" },
+                  })}
                   type="password"
                   name="password"
                   id="password"
                   placeholder="••••••••"
                   className="bg-blackLight border border-white text-white rounded-lg focus:ring-orange focus:border-orange block w-full p-2.5"
-                  required
                 />
+                <p className="text-red-500 text-sm mt-2">
+                  {(errors.password as FieldError)?.message}
+                </p>
               </div>
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
@@ -60,13 +115,10 @@ const Login = () => {
                     </label>
                   </div>
                 </div>
-                <a
-                  href="#"
-                  className="text-sm font-medium text-orangeLight hover:underline"
-                >
+                <a className="text-sm font-medium text-orangeLight hover:underline">
                   Forgot password?
                 </a>
-              </div>
+              </div> */}
 
               <button
                 type="submit"
@@ -79,6 +131,11 @@ const Login = () => {
                 <Link to={"/sign"}>
                   <span className="font-medium text-orangeLight hover:underline">
                     Sign up
+                  </span>
+                </Link>
+                <Link to={"/"}>
+                  <span className="font-medium text-orangeLight hover:underline">
+                    Go Home
                   </span>
                 </Link>
               </p>

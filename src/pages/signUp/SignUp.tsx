@@ -3,7 +3,6 @@ import Logo from "../../components/logo/Logo";
 import LeftSign from "./leftSign/LeftSign";
 import { FieldError, useForm } from "react-hook-form";
 import axios from "axios";
-import { useEffect } from "react";
 
 interface RegisterRequest {
   username: string;
@@ -21,9 +20,9 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = async (data: RegisterRequest) => {
-    console.log(data);
+    console.log("data", data);
     try {
-      const response = await axios.post(
+      const response: { sessionid: string } = await axios.post(
         `${import.meta.env.VITE_API_LINK}register/`,
         JSON.stringify(data),
         {
@@ -36,15 +35,6 @@ const SignUp = () => {
       console.error("Error submitting form:", error);
     }
   };
-
-  // useEffect(() => {
-  //   onSubmit({
-  //     username: "4erf21ew",
-  //     email: "use3er@exa1mple.com",
-  //     password: "string10",
-  //     password2: "string10",
-  //   });
-  // }, []);
 
   return (
     <>
@@ -67,22 +57,13 @@ const SignUp = () => {
                     type="text"
                     className=" border  w-full text-sm text-white pl-4 py-2.5 rounded-md outline-white border-white bg-blackLight"
                     placeholder="Enter name"
-                    {...register("username", {
-                      required: "Is required!",
-                      maxLength: { value: 127, message: "Too Long" },
-                      minLength: { value: 3, message: "Too short" },
-                    })}
+                    {...register("username")}
                   />
-                  {
-                    <p className="text-red-500 text-sm mt-2">
-                      {(errors.name as FieldError)?.message}
-                    </p>
-                  }
+                  {}
                 </div>
                 <div>
                   <label className="text-white text-sm mb-2 block">Email</label>
                   <input
-                    {...register("email")}
                     className=" border w-full text-sm text-white pl-4 py-2.5 rounded-md outline-white border-white bg-blackLight"
                     placeholder="Enter email"
                     {...register("email", {

@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
-
 import Footer from "../../components/footer/Footer";
+import Cookies from "js-cookie";
 
 import "../../index.css";
 import { GiArrowCursor } from "react-icons/gi";
 import Header from "../../components/header/Header";
 
 function Home() {
-  const [message, setMessages] = useState("");
-  const [allUsersNum, setAllUsersNum] = useState(0);
   const [ws, setWs] = useState(null);
-
-  const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+  const [countUsers, setCountUsers] = useState(0);
 
   const [nameUser, setNameUser] = useState("");
-
-  const [totalUsers, setTotalUsers] = useState<any>([]);
+  const [movedCursor, setMovedCursor] = useState<any>([]);
+  const [allUsersHaveConnected, setAllUsersHaveConnected] = useState<any>([]);
 
   useEffect(() => {
-    const socket = new WebSocket(import.meta.env.VITE_WS_LINK);
+    const cookie = Cookies.get("sessionId");
+    const socket = new WebSocket(`${import.meta.env.VITE_WS_LINK}?t=${cookie}`);
 
     socket.onopen = () => {
       console.log("WebSocket connection established");
@@ -26,37 +24,50 @@ function Home() {
 
     socket.onmessage = async (e) => {
       console.log("Received:", e.data);
-      setMessages(e.data);
 
       try {
         const parsed = await JSON.parse(e.data);
 
-        parsed.map((item) => {
+        parsed.map((item: any) => {
           const { action } = item;
-          // console.log(item);
+
           switch (action) {
             case "connected":
-              setNameUser(action.u_id);
+              setNameUser(item.username);
+              break;
+            case "create_users_on_board":
+              setAllUsersHaveConnected(item.users);
               break;
             case "move_cusor":
-              setTotalUsers((state) => {
+              setMovedCursor((state) => {
                 const filteredState = state.filter(
-                  (el) => el.u_id !== item.u_id
+                  (cursor) => cursor.u_id !== item.u_id
                 );
 
                 return [...filteredState, { ...item }];
               });
+              // setMovedCursor(item);
+
               break;
             case "update_total_users":
-              setAllUsersNum(item.count);
+              setCountUsers(item.count);
+              break;
+            case "create_cusor":
+              console.log(item);
+              setAllUsersHaveConnected((state) => {
+                delete item.action;
+                console.log("item", item);
+                return [...state, { ...item }];
+              });
               break;
             case "delete_cursor":
-              setTotalUsers((state) => {
+              setAllUsersHaveConnected((state) => {
                 const filteredState = state.filter(
-                  (el) => el.u_id === item.u_id
+                  (el) => el.u_id !== item.u_id
                 );
                 return [...filteredState];
               });
+
               break;
           }
         });
@@ -86,9 +97,6 @@ function Home() {
     if (!ws) return;
 
     const handleMouseMove = (e) => {
-      const newCoordinates = { x: e.clientX, y: e.clientY };
-      setCoordinates(newCoordinates);
-
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(
           JSON.stringify({
@@ -111,17 +119,25 @@ function Home() {
       <Header />
 
       <div className="bg-blackBg  h-screen text-white">
-        <div className="text-center">{nameUser}</div>
-
         <main className="h-5/6">
-          <h2>Last message: {message}</h2>
-          <p>
-            Your coordinates: x={coordinates.x}, y={coordinates.y}
-          </p>
+          <h1 className="text-4xl">Hello user: {nameUser}</h1>
         </main>
 
-        {totalUsers.map((cursor: any) => {
-          let { cords, u_id, color } = cursor;
+        {movedCursor.map((cursor: any) => {
+          let { cords, u_id } = cursor;
+
+          const filtered = allUsersHaveConnected.filter(
+            (user) => user.u_id === u_id
+          );
+          if (filtered[0] === undefined) {
+            return;
+          }
+
+          const { color, username } = filtered[0];
+
+          // console.log("cursor", cursor.u_id);
+          // console.log("allUsersFirstConnection", allUsersFirstConnection);
+          // console.log("allUsersFirstConnection", allUsersFirstConnection.u_id);
 
           return (
             <div
@@ -136,10 +152,11 @@ function Home() {
               className="text-2xl drop-shadow-2xl shadow-white"
             >
               <GiArrowCursor />
+              <div className={`ml-5 text-${color}`}>{username}</div>
             </div>
           );
         })}
-        <Footer allUsersNum={allUsersNum} />
+        <Footer allUsersNum={countUsers} />
       </div>
     </>
   );
