@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Logo from "../../components/logo/Logo";
 import { FieldError, useForm } from "react-hook-form";
 import axios from "axios";
@@ -19,6 +19,7 @@ const Login = () => {
   } = useForm<Login>();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSaveCookies = (sessionid: string) => {
     dispatch(setCookie(sessionid));
@@ -38,6 +39,7 @@ const Login = () => {
       Cookies.set("sessionId", response.data.sessionid);
 
       handleSaveCookies(response.data.sessionid);
+      navigate("/", { replace: true });
       console.log(response);
     } catch (e) {
       console.log(e);
@@ -131,11 +133,6 @@ const Login = () => {
                 <Link to={"/sign"}>
                   <span className="font-medium text-orangeLight hover:underline">
                     Sign up
-                  </span>
-                </Link>
-                <Link to={"/"}>
-                  <span className="font-medium text-orangeLight hover:underline">
-                    Go Home
                   </span>
                 </Link>
               </p>
