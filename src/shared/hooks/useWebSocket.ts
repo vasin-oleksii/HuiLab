@@ -43,7 +43,7 @@ const useWebSocket = () => {
             case "update_total_users":
               setCountUsers(item.count);
               break;
-            case "create_cusor":
+            case "create_cursor":
               setAllUsersHaveConnected((state) => {
                 delete item.action;
                 return [...state, { ...item }];
