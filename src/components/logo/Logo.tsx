@@ -3,7 +3,7 @@ import { MdConnectingAirports } from "react-icons/md";
 
 const Logo = () => {
   return (
-    <div className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+    <div className="flex items-center  text-2xl font-semibold text-gray-900 dark:text-white">
       <GiPisaTower />
       Hui
       <MdConnectingAirports />

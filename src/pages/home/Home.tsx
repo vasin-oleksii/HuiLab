@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Footer from "../../components/footer/Footer";
 
 import "../../index.css";
@@ -16,8 +16,15 @@ function Home() {
   } = useWebSocket();
 
   useEffect(() => {
+    let lastExecution = 0;
+    const throttleInterval = 100;
+
     const handleMouseMove = (e: MouseEvent) => {
-      sendCursorPosition({ x: e.clientX, y: e.clientY });
+      const now = Date.now();
+      if (now - lastExecution >= throttleInterval) {
+        sendCursorPosition({ x: e.clientX, y: e.clientY });
+        lastExecution = now;
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -31,7 +38,7 @@ function Home() {
     <>
       <Header />
 
-      <div className="bg-blackBg  h-screen text-white">
+      <div className="bg-blackBg h-screen text-white">
         <main className="h-5/6">
           <h1 className="text-4xl">Hello user: {nameUser}</h1>
         </main>

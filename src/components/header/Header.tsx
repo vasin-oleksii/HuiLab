@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import FunctionalButtons from "./FunctionalButtons";
 import Settings from "./Settings";
+import Logo from "../logo/Logo";
 
 const Header = () => {
   return (
@@ -8,12 +9,9 @@ const Header = () => {
       <div className="flex justify-between">
         <div className="flex items-center justify-center">
           <Link to={"/"}>
-            <h1
-              className="hover:text-orangeLight text-base cursor-pointer text-white"
-              onClick={() => alert("you are gay")}
-            >
-              HuiLab
-            </h1>
+            <div onClick={() => alert("you are gay")} className="m-0">
+              <Logo />
+            </div>
           </Link>
         </div>
         <Settings />
